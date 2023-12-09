@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Dork Tool</title>
+<style>
+    body {
+      background-color: #000;
+      color: #1f98f4; /* Blue text color */
+      font-family: 'Roboto Mono', monospace; /* Terminal-like font */
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 30px;
+    }
+
+    #searchForm {
+      display: inline-block;
+      padding: 20px;
+      border: 2px solid #1f98f4; /* Blue border color */
+      border-radius: 5px;
+      background-color: #111; /* Terminal background color */
+      box-shadow: 0 0 10px rgba(31, 152, 244, 0.5); /* Terminal box shadow */
+    }
+
+    label {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    select {
+      width: 300px;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: none;
+      border-bottom: 2px solid #1f98f4; /* Blue input underline color */
+      background-color: transparent;
+      color: #1f98f4; /* Blue text color */
+      font-family: 'Roboto Mono', monospace; /* Terminal-like font */
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1f98f4; /* Blue button color */
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0f69ab; /* Darker blue button hover color */
+    }
+  </style>
+  <script>
+    function search() {
+      const domain = document.getElementById('domainInput').value;
+      const searchType = document.getElementById('searchType').value;
+      let query = '';
+
+      switch (searchType) {
+        case '1':
+          query = `site:${domain} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv`;
+          break;
+        case '2':
+          query = `site:${domain} intitle:index.of`;
+          break;
+        case '3':
+          query = `site:${domain} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env`;
+          break;
+        case '4':
+          query = `site:${domain} ext:sql | ext:dbf | ext:mdb`;
+          break;
+        case '5':
+          query = `site:${domain} ext:log`;
+          break;
+        case '6':
+          query = `site:${domain} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup`;
+          break;
+        case '7':
+          query = `site:${domain} inurl:login | inurl:signin | intitle:Login | intitle:"sign in" | inurl:auth`;
+          break;
+        case '8':
+          query = `site:${domain} intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"`;
+          break;
+        case '9':
+          query = `site:${domain} "PHP Parse error" | "PHP Warning" | "PHP Error"`;
+          break;
+        case '10':
+          query = `site:${domain} ext:php intitle:phpinfo "published by the PHP Group"`;
+          break;
+        case '11':
+          query = `site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org  | site:codeshare.io | site:trello.com "${domain}"`;
+          break;
+        case '12':
+          query = `site:github.com | site:gitlab.com ${domain}`;
+          break;
+        case '13':
+          query = `site:stackoverflow.com ${domain}`;
+          break;
+        case '14':
+          query = `site:${domain} inurl:signup`;
+          break;
+        case '15':
+          query = `site:${domain} -www.${domain}`;
+          break;
+        case '16':
+          query = `site:*.${domain}`;
+          break;
+        case '17':
+          query = `site:web.archive.org/web/*/${domain}`;
+          break;
+        case '18':
+          window.open(`https://www.google.com/search?q=${domain}&tbm=ip`, '_blank');
+          return;
+        default:
+          // Handle invalid option
+          return;
+      }
+
+      const encodedQuery = encodeURIComponent(query);
+      const searchURL = `https://www.google.com/search?q=${encodedQuery}`;
+      window.open(searchURL, '_blank');
+    }
+  </script>
+</head>
+<body>
+  <h1>Google Dork Tool</h1>
+  <form id="searchForm">
+    <label for="domainInput">Enter Domain:</label>
+    <input type="text" id="domainInput" name="domainInput"><br><br>
+
+    <label for="searchType">Select Search Type:</label>
+    <select id="searchType" name="searchType">
+      <option value="1">Publicly exposed documents</option>
+      <option value="2">Directory listing vulnerabilities</option>
+      <option value="3">Configuration files exposed</option>
+      <option value="4">Database files exposed</option>
+      <option value="5">Log files exposed</option>
+      <option value="6">Backup and old files</option>
+      <option value="7">Login pages</option>
+      <option value="8">SQL errors</option>
+      <option value="9">PHP errors / warning</option>
+      <option value="10">phpinfo()</option>
+      <option value="11">Search pastebin.com / pasting sites</option>
+      <option value="12">Search github.com and gitlab.com</option>
+      <option value="13">Search stackoverflow.com</option>
+      <option value="14">Signup pages</option>
+      <option value="15">Find Subdomains</option>
+      <option value="16">Find Sub-Subdomains</option>
+      <option value="17">Search in Wayback Machine</option>
+      <option value="18">Show only IP addresses</option>
+    </select><br><br>
+
+    <button type="button" onclick="search()">Search</button>
+  </form>
+</body>
+</html>
+
